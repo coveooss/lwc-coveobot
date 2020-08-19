@@ -59,24 +59,22 @@ export default class LwcChatbotQuery extends LightningElement {
 
   resultClickHandler(event) {
     const rank = event.detail;
-    const theResult = this.results[rank];
-    if (theResult) {
-      Analytics.logClickEvent(
-        theResult,
-        {
-          actionCause: ACTION_CAUSE_BOT,
-          documentPosition: rank + 1,
-          language: 'en',
-          searchQueryUid: this.lastQueryUid,
-          userAgent: ACTION_CAUSE_BOT,
-          originContext: ACTION_CAUSE_BOT,
-          originLevel1: SEARCH_HUB,
-          originLevel2: 'Chatbot question',
-          anonymous: this.endpoint.isGuestUser
-        },
-        this.endpoint
-      )
-    }
+    if (!(rank && this.results[rank])) { return; }
+    Analytics.logClickEvent(
+      theResult,
+      {
+        actionCause: ACTION_CAUSE_BOT,
+        documentPosition: rank + 1,
+        language: 'en',
+        searchQueryUid: this.lastQueryUid,
+        userAgent: ACTION_CAUSE_BOT,
+        originContext: ACTION_CAUSE_BOT,
+        originLevel1: SEARCH_HUB,
+        originLevel2: 'Chatbot question',
+        anonymous: this.endpoint.isGuestUser
+      },
+      this.endpoint
+    )
   }
 
   get hasResults() {
