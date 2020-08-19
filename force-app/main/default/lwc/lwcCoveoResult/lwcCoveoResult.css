@@ -1,0 +1,34 @@
+.result-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.coveo-result-container {
+    display: inline-block;
+    background-color: #f4f4f4;
+    padding: 18px 10px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    width: 100%;
+}
+
+.youtube-result iframe {
+    width: 90%;
+}
+
+.coveo-excerpt {
+    font-size: 13px;
+    text-align: left;
+    display: inline-block;
+    line-height: 1.7em;
+}
+
+.questionAnswering__List {
+    list-style-type: decimal;
+    list-style: decimal;
+}
+
+.questionAnswering__List li {
+    list-style: decimal;
+}
