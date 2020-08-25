@@ -19,8 +19,8 @@ export default class ChatMessageDefaultUI extends BaseChatMessage {
       return;
     }
 
-    if (this.messageContent.value.startsWith(COVEO_PREFIX)) {
-      const messageSplit = this.messageContent.value.split(':');
+    if (this.decodedMessage.startsWith(COVEO_PREFIX)) {
+      const messageSplit = this.decodedMessage.split(':');
       switch (messageSplit[1]) {
         case ACTIONS_TYPES.search:
           this.messageType = MESSAGE_TYPES.userQuery;
@@ -32,8 +32,19 @@ export default class ChatMessageDefaultUI extends BaseChatMessage {
       }
     } else {
       this.messageType = MESSAGE_TYPES.text;
-      this.content = this.messageContent.value;
+      this.content = this.decodedMessage;
     }
+  }
+
+  htmlDecode(input) {
+    var e = document.createElement('textarea');
+    e.innerHTML = input;
+    // handle case of empty input
+    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+  }
+
+  get decodedMessage() {
+    return this.htmlDecode(this.messageContent.value);
   }
 
   get isUserQuery() {

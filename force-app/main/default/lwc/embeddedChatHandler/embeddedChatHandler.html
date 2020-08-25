@@ -1,6 +1,6 @@
 <template>
     <template if:false={isAgent}>
-        <div class="chatMessage chasitor">{messageContent.value}</div>
+        <div class="chatMessage chasitor">{decodedMessage}</div>
     </template>
     <template if:true={isAgent}>
         <template if:true={isPlainText}>
