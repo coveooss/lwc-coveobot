@@ -15,7 +15,7 @@ export default class Analytics {
    * Get the visitorId from sessionStorage.
    */
   static getVisitorId() {
-    return window.sessionStorage.getItem(VISITOR_ID_KEY);
+    return window.localStorage.getItem(VISITOR_ID_KEY);
   }
 
   /**
@@ -23,7 +23,7 @@ export default class Analytics {
    * @param {String} visitorId The visitorId to store in sessionStorage
    */
   static setVisitorId(visitorId) {
-    window.sessionStorage.setItem(VISITOR_ID_KEY, visitorId);
+    window.localStorage.setItem(VISITOR_ID_KEY, visitorId);
   }
 
   /**

@@ -1,7 +1,7 @@
 import BaseChatMessage from 'lightningsnapin/baseChatMessage';
 import { track } from 'lwc';
 
-const COVEO_PREFIX = 'COVEO:'
+const COVEO_PREFIX = 'COVEO|'
 const MESSAGE_TYPES = { coveo: 'COVEO', text: 'PLAIN_TEXT', userQuery: 'search' };
 const ACTIONS_TYPES = { search: 'search' };
 
@@ -20,7 +20,7 @@ export default class ChatMessageDefaultUI extends BaseChatMessage {
     }
 
     if (this.decodedMessage.startsWith(COVEO_PREFIX)) {
-      const messageSplit = this.decodedMessage.split(':');
+      const messageSplit = this.decodedMessage.split('|');
       switch (messageSplit[1]) {
         case ACTIONS_TYPES.search:
           this.messageType = MESSAGE_TYPES.userQuery;
