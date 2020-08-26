@@ -12,15 +12,15 @@ const VISITOR_ID_KEY = 'coveo_visitorId';
 export default class Analytics {
 
   /**
-   * Get the visitorId from sessionStorage.
+   * Get the visitorId from localStorage.
    */
   static getVisitorId() {
     return window.localStorage.getItem(VISITOR_ID_KEY);
   }
 
   /**
-   * Store a value in sessionStorage for the visitorId.
-   * @param {String} visitorId The visitorId to store in sessionStorage
+   * Store a value in localStorage for the visitorId.
+   * @param {String} visitorId The visitorId to store in localStorage
    */
   static setVisitorId(visitorId) {
     window.localStorage.setItem(VISITOR_ID_KEY, visitorId);
