@@ -56,7 +56,7 @@ export default class LwcChatbotQuery extends LightningElement {
       // Send a query to Coveo's SearchAPI /rest/search.
       const searchAPIResponse = await SearchAPI.executeQuery(this.endpoint, { q: this.query });
       // Token may have expired, retry once after generating a new token.
-      if(searchAPIResponse.status === 401 && retry) {
+      if(searchAPIResponse.status === 419 && retry) {
         this.refreshToken();
         return this.initAndQuery(false);
       }
