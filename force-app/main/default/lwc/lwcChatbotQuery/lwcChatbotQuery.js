@@ -96,7 +96,7 @@ export default class LwcChatbotQuery extends LightningElement {
 
   resultClickHandler(event) {
     const rank = event.detail;
-    if(!(rank && this.results[rank])) {
+    if((rank == undefined || !this.results[rank])) {
       return;
     }
     Analytics.logClickEvent(
