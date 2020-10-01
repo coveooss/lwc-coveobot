@@ -62,6 +62,7 @@ export default class Analytics {
       return jsonResponse;
     } catch (error) {
       console.error(`Error sending search event: ${error.message}`);
+      return {};
     }
   }
 
@@ -104,6 +105,7 @@ export default class Analytics {
       return jsonResponse;
     } catch (err) {
       console.error(err.message);
+      return {};
     }
   }
 
@@ -138,6 +140,7 @@ export default class Analytics {
       return jsonResponse;
     } catch (err) {
       console.error(err.message);
+      return {};
     }
   }
 

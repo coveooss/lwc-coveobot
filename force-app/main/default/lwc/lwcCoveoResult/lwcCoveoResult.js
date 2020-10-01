@@ -8,13 +8,15 @@ export default class LwcCoveoResult extends LightningElement {
   coveoLoaded = false;
 
   connectedCallback() {
-    this.content = this.result.title;
-    if (this.isYoutube) {
-      this.content = 'https://www.youtube.com/embed/' + this.result.raw.ytvideoid;
+    if(this.result) {
+      this.content = this.result.title;
+      if (this.isYoutube) {
+        this.content = 'https://www.youtube.com/embed/' + this.result.raw.ytvideoid;
+      }
     }
   }
 
-  handleClick(event) {
+  handleClick() {
     this.dispatchEvent(new CustomEvent('resultclick', { detail: this.rank }));
   }
 
@@ -27,6 +29,6 @@ export default class LwcCoveoResult extends LightningElement {
   }
 
   get isAnythingElse() {
-    return !this.isYoutube && !this.isAnswer;
+    return this.result && !this.isYoutube && !this.isAnswer;
   }
 }

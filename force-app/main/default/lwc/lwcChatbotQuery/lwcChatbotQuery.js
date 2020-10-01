@@ -1,4 +1,4 @@
-import { LightningElement, api, track, wire } from 'lwc';
+import { LightningElement, api, track } from 'lwc';
 import getEndpoint from '@salesforce/apex/LWCEndpointController.getEndpoint';
 import Analytics from "c/analytics";
 import SearchEndpoint from "c/searchEndpoint";
@@ -58,7 +58,8 @@ export default class LwcChatbotQuery extends LightningElement {
       // Token may have expired, retry once after generating a new token.
       if(searchAPIResponse.status === 419 && retry) {
         this.refreshToken();
-        return this.initAndQuery(false);
+        this.initAndQuery(false);
+        return;
       }
       // Store the lastQueryUid, this is useful to send analytics events.
       this.lastQueryUid = searchAPIResponse.searchUid;
@@ -96,7 +97,7 @@ export default class LwcChatbotQuery extends LightningElement {
 
   resultClickHandler(event) {
     const rank = event.detail;
-    if((rank == undefined || !this.results[rank])) {
+    if((rank === undefined || !this.results[rank])) {
       return;
     }
     Analytics.logClickEvent(
