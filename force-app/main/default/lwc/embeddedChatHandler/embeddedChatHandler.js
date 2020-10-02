@@ -1,3 +1,4 @@
+/* eslint-disable @lwc/lwc/no-inner-html */
 import BaseChatMessage from 'lightningsnapin/baseChatMessage';
 import { track } from 'lwc';
 
