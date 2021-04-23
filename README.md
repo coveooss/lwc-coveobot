@@ -92,3 +92,7 @@ The way to link all events to be part of the same visit at Coveo is using the [v
 This is important for unauthenticated users in order to keep matching the current chatbot session with the other actions on the community for example.
 
 For authenticated users, read this scenario explaining how Coveo handles [user stitching for authenticated users](https://docs.coveo.com/en/3297/coveo-machine-learning/understanding-user-stitching#scenario-5).
+
+### Give your users access to the Apex class
+
+If your chatbot is exposed to guest users (users who are not logged in), you must make sure that your Guest User has access to the Apex class LWCEndpointController. You may do this through the Community Builder. [This Salesforce critical update](https://releasenotes.docs.salesforce.com/en-us/winter20/release-notes/rn_lc_restrict_apex_guest_users.htm) introduced a requirement to give all guest users access to Apex classes containing @auraenabled methods that they must interact with. More details in this [Knowledge Article](https://connect.coveo.com/s/article/5770).
