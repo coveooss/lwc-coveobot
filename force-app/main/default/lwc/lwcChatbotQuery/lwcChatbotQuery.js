@@ -7,7 +7,7 @@ import SearchAPI from 'c/searchApi';
 const SEARCH_HUB = 'Chatbot';
 const ACTION_CAUSE_BOT = 'Chatbot';
 const ORIGIN_2 = 'Chatbot question';
-const SESSIONSTORAGE_TOKEN_KEY = 'coveo_token';
+const SESSIONSTORAGE_ENDPOINT_KEY = 'coveo_endpoint';
 const DEFAULT_PLATFORM_ENDPOINT = 'https://platform.cloud.coveo.com';
 
 export default class LwcChatbotQuery extends LightningElement {
@@ -22,7 +22,7 @@ export default class LwcChatbotQuery extends LightningElement {
   }
 
   async refreshToken() {
-    window.sessionStorage.removeItem(SESSIONSTORAGE_TOKEN_KEY);
+    window.sessionStorage.removeItem(SESSIONSTORAGE_ENDPOINT_KEY);
     await this.setupEndpoint();
   }
 
@@ -30,14 +30,15 @@ export default class LwcChatbotQuery extends LightningElement {
    * Setup a search endpoint. This means querying an Apex method to get endpoint data that includes a search token.
    */
   async setupEndpoint() {
-    const sessionStorageToken = window.sessionStorage.getItem(SESSIONSTORAGE_TOKEN_KEY);
-    if (sessionStorageToken && sessionStorageToken !== 'undefined') {
-      this.endpoint = new SearchEndpoint(sessionStorageToken, DEFAULT_PLATFORM_ENDPOINT, DEFAULT_PLATFORM_ENDPOINT);
+    const sessionStorageEndpoint = window.sessionStorage.getItem(SESSIONSTORAGE_ENDPOINT_KEY);
+    if (sessionStorageEndpoint && sessionStorageEndpoint !== 'undefined') {
+      const data = JSON.parse(sessionStorageEndpoint);
+      this.endpoint = new SearchEndpoint(data.token, data.clientUri || data.platformUri, data.clientUri || data.analyticUri);
     } else {
       const endpointData = await getEndpoint({ searchHub: SEARCH_HUB });
       const data = JSON.parse(endpointData);
-      window.sessionStorage.setItem(SESSIONSTORAGE_TOKEN_KEY, data.token);
-      this.endpoint = new SearchEndpoint(data.token, DEFAULT_PLATFORM_ENDPOINT, DEFAULT_PLATFORM_ENDPOINT);
+      window.sessionStorage.setItem(SESSIONSTORAGE_ENDPOINT_KEY, endpointData);
+      this.endpoint = new SearchEndpoint(data.token, data.clientUri || data.platformUri, data.clientUri || data.analyticUri);
     }
   }
 
@@ -63,7 +64,7 @@ export default class LwcChatbotQuery extends LightningElement {
       }
       // Store the lastQueryUid, this is useful to send analytics events.
       this.lastQueryUid = searchAPIResponse.searchUid;
-      // Send a search event. This is async but no need to wait for it 
+      // Send a search event. This is async but no need to wait for it
       // since we don't want to block the execution and display of results.
       this.sendSearchEvent(searchAPIResponse);
       this.results = searchAPIResponse.results;
