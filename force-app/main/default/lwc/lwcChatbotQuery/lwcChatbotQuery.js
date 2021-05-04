@@ -37,7 +37,7 @@ export default class LwcChatbotQuery extends LightningElement {
       const endpointData = await getEndpoint({ searchHub: SEARCH_HUB });
       const data = JSON.parse(endpointData);
       window.sessionStorage.setItem(SESSIONSTORAGE_TOKEN_KEY, data.token);
-      this.endpoint = new SearchEndpoint(data.token, data.platformUri, data.analyticUri);
+      this.endpoint = new SearchEndpoint(data.token, DEFAULT_PLATFORM_ENDPOINT, DEFAULT_PLATFORM_ENDPOINT);
     }
   }
 
