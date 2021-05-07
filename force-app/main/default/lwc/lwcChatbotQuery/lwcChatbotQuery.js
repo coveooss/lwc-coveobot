@@ -7,7 +7,7 @@ import SearchAPI from 'c/searchApi';
 const SEARCH_HUB = 'Chatbot';
 const ACTION_CAUSE_BOT = 'Chatbot';
 const ORIGIN_2 = 'Chatbot question';
-const SESSIONSTORAGE_TOKEN_KEY = 'coveo_token';
+const SESSIONSTORAGE_ENDPOINT_KEY = 'coveo_endpoint';
 const DEFAULT_PLATFORM_ENDPOINT = 'https://platform.cloud.coveo.com';
 
 export default class LwcChatbotQuery extends LightningElement {
@@ -22,7 +22,7 @@ export default class LwcChatbotQuery extends LightningElement {
   }
 
   async refreshToken() {
-    window.sessionStorage.removeItem(SESSIONSTORAGE_TOKEN_KEY);
+    window.sessionStorage.removeItem(SESSIONSTORAGE_ENDPOINT_KEY);
     await this.setupEndpoint();
   }
 
@@ -30,14 +30,26 @@ export default class LwcChatbotQuery extends LightningElement {
    * Setup a search endpoint. This means querying an Apex method to get endpoint data that includes a search token.
    */
   async setupEndpoint() {
-    const sessionStorageToken = window.sessionStorage.getItem(SESSIONSTORAGE_TOKEN_KEY);
-    if (sessionStorageToken && sessionStorageToken !== 'undefined') {
-      this.endpoint = new SearchEndpoint(sessionStorageToken, DEFAULT_PLATFORM_ENDPOINT, DEFAULT_PLATFORM_ENDPOINT);
-    } else {
-      const endpointData = await getEndpoint({ searchHub: SEARCH_HUB });
-      const data = JSON.parse(endpointData);
-      window.sessionStorage.setItem(SESSIONSTORAGE_TOKEN_KEY, data.token);
-      this.endpoint = new SearchEndpoint(data.token, data.platformUri, data.analyticUri);
+    let dataToParse = window.sessionStorage.getItem(SESSIONSTORAGE_ENDPOINT_KEY);
+    let token = '';
+    let clientUri = '';
+    let analyticsUri = '';
+    try {
+      if (!dataToParse) {
+        dataToParse = await getEndpoint({ searchHub: SEARCH_HUB });
+      }
+      const endpointData = JSON.parse(dataToParse);
+      token = endpointData.token;
+      clientUri = endpointData.clientUri || DEFAULT_PLATFORM_ENDPOINT;
+      analyticsUri = endpointData.clientUri || DEFAULT_PLATFORM_ENDPOINT;
+      window.sessionStorage.setItem(SESSIONSTORAGE_ENDPOINT_KEY, JSON.stringify({
+        token,
+        clientUri,
+        analyticsUri
+      }));
+      this.endpoint = new SearchEndpoint(token, clientUri, analyticsUri);
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -56,7 +68,7 @@ export default class LwcChatbotQuery extends LightningElement {
       // Send a query to Coveo's SearchAPI /rest/search.
       const searchAPIResponse = await SearchAPI.executeQuery(this.endpoint, { q: this.query });
       // Token may have expired, retry once after generating a new token.
-      if(searchAPIResponse.status === 419 && retry) {
+      if (searchAPIResponse.status === 419 && retry) {
         this.refreshToken();
         this.initAndQuery(false);
         return;
@@ -97,7 +109,7 @@ export default class LwcChatbotQuery extends LightningElement {
 
   resultClickHandler(event) {
     const rank = event.detail;
-    if((rank === undefined || !this.results[rank])) {
+    if ((rank === undefined || !this.results[rank])) {
       return;
     }
     Analytics.logClickEvent(

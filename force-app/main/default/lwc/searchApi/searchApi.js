@@ -14,7 +14,7 @@ export default class SearchAPI {
    */
   static async executeQuery(endpoint, queryBody) {
     try {
-      const response = await fetch(`${endpoint.platformUri}${SEARCH_PATH}`, {
+      const response = await fetch(`${endpoint.clientUri}${SEARCH_PATH}`, {
         method: SEARCH_METHOD,
         headers: { ...QUERY_HEADERS, Authorization: `Bearer ${endpoint.token}` },
         body: JSON.stringify(queryBody)

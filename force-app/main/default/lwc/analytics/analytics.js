@@ -1,4 +1,4 @@
-const API_ENDPOINT = 'https://platform.cloud.coveo.com/rest/ua/v15/analytics';
+const DEFAULT_API_ENDPOINT = 'https://platform.cloud.coveo.com/rest/ua/v15/analytics';
 const API_METHOD = 'POST';
 const SEARCH_PATH = '/search';
 const CLICK_PATH = '/click';
@@ -46,7 +46,7 @@ export default class Analytics {
     const visitorString = Analytics.buildVisitorIdString(visitorId);
 
     try {
-      const response = await fetch(`${API_ENDPOINT}${SEARCH_PATH}${visitorString}`, {
+      const response = await fetch(`${endpoint.analyticsUri || DEFAULT_API_ENDPOINT}${SEARCH_PATH}${visitorString}`, {
         method: API_METHOD,
         headers: { 
           ...API_HEADERS, 
@@ -89,7 +89,7 @@ export default class Analytics {
     const visitorString = Analytics.buildVisitorIdString(visitorId);
 
     try {
-      const response = await fetch(`${API_ENDPOINT}${CLICK_PATH}${visitorString}`, {
+      const response = await fetch(`${endpoint.analyticsUri || DEFAULT_API_ENDPOINT}${CLICK_PATH}${visitorString}`, {
         method: API_METHOD,
         headers: { 
           ...API_HEADERS, 
@@ -124,7 +124,7 @@ export default class Analytics {
     const visitorString = Analytics.buildVisitorIdString(visitorId);
 
     try {
-      const response = await fetch(`${API_ENDPOINT}${CUSTOM_PATH}${visitorString}`, {
+      const response = await fetch(`${endpoint.analyticsUri || DEFAULT_API_ENDPOINT}${CUSTOM_PATH}${visitorString}`, {
         method: API_METHOD,
         headers: {
           ...API_HEADERS,

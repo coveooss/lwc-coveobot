@@ -1,7 +1,9 @@
+const ANALYTICS_PATH = '/rest/ua/v15/analytics';
+
 export default class SearchEndpoint {
-  constructor(token, platformUri, analyticsUri) {
+  constructor(token, clientUri, analyticsUri) {
     this.token = token;
-    this.platformUri = platformUri;
-    this.analyticsUri = analyticsUri;
+    this.clientUri = clientUri;
+    this.analyticsUri = analyticsUri + ANALYTICS_PATH;
   }
 }

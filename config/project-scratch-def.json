@@ -1,18 +1,37 @@
 {
   "orgName": "root company",
   "edition": "Developer",
-  "features": [],
+  "features": [
+    "Communities",
+    "ServiceCloud",
+    "DebugApex",
+    "Knowledge",
+    "LightningServiceConsole",
+    "LiveAgent",
+    "Chatbot"
+  ],
   "settings": {
-    "lightningExperienceSettings": {
-        "enableS1DesktopEnabled": true
+    "knowledgeSettings": {
+      "enableKnowledge": true,
+      "showArticleSummariesCustomerPortal": true
     },
-    "securitySettings": {
-        "passwordPolicies": {
-            "enableSetPasswordInApi": true
-        }
+    "liveAgentSettings": {
+      "enableLiveAgent": true
+    },
+    "omniChannelSettings": {
+      "enableOmniChannel": true
+    },
+    "communitiesSettings": {
+      "enableNetworksEnabled": true
+    },
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
     },
     "mobileSettings": {
-        "enableS1EncryptedStoragePref2": false
+      "enableS1EncryptedStoragePref2": false
+    },
+    "botSettings": {
+      "enableBots": true
     }
   }
 }
