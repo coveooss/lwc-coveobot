@@ -1,0 +1,17 @@
+.chatMessage {
+    font-size: 0.875em;
+    max-width: 70%;
+    padding: 10px;
+    white-space: pre-wrap;
+    text-align: left;
+}
+
+.agent {
+    margin-left: 40px;
+    border-radius: 10px 10px 10px 0;
+}
+
+.agent.plainText {
+    color: #333;
+    background: #f4f4f4;
+}
