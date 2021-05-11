@@ -81,18 +81,17 @@ export default class LwcChatbotQuery extends LightningElement {
         return;
       }
       this.isLoading = false;
-      if (searchAPIResponse.status === 200) {
+      if(searchAPIResponse.status && searchAPIResponse.status !== 200) {
+        this.results = [];
+        console.error(searchAPIResponse.body.message || 'Query Error.');
+      } else {
         // Store the lastQueryUid, this is useful to send analytics events.
         this.lastQueryUid = searchAPIResponse.searchUid;
         // Send a search event. This is async but no need to wait for it 
         // since we don't want to block the execution and display of results.
         this.sendSearchEvent(searchAPIResponse);
         this.results = searchAPIResponse.results;
-      } else {
-        this.results = [];
-        console.error(searchAPIResponse.body.message || 'Query Error.');
       }
-
     } catch (err) {
       // Handle API error here.
       console.error(err.message);
