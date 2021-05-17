@@ -1,10 +1,20 @@
 <template>
-    <template if:true={hasResults}>
-        <template iterator:it={resultsToDisplay}>
-            <c-lwc-coveo-result result={it.value} key={it.value.uniqueId} onresultclick={resultClickHandler} rank={it.value.rank}></c-lwc-coveo-result>
-        </template>
+    <template if:true={hasError}>
+        <div class="chatMessage agent plainText">There was an error searching my knowledge.</div>
     </template>
-    <template if:false={hasResults}>
-        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+    <template if:false={hasError}>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </template>
+        <template if:false={isLoading}>
+            <template if:true={hasResults}>
+                <template iterator:it={resultsToDisplay}>
+                    <c-lwc-coveo-result result={it.value} key={it.value.uniqueId} onresultclick={resultClickHandler} rank={it.value.rank}></c-lwc-coveo-result>
+                </template>
+            </template>
+            <template if:false={hasResults}>
+                <div class="chatMessage agent plainText">No results found for your question.</div>
+            </template>
+        </template>
     </template>
 </template>

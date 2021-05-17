@@ -14,6 +14,8 @@ export default class LwcChatbotQuery extends LightningElement {
   @api query;
   @track content = '';
   @track results = [];
+  @track isLoading = false;
+  @track serverError;
 
   handleEndpointError(error) {
     this.token = '';
@@ -49,6 +51,10 @@ export default class LwcChatbotQuery extends LightningElement {
       }));
       this.endpoint = new SearchEndpoint(token, clientUri, analyticsUri);
     } catch (error) {
+      if (error.status && error.status === 500) {
+        console.error(error.body.message);
+        this.serverError = error.body.message;
+      }
       console.error(error);
     }
   }
@@ -63,6 +69,7 @@ export default class LwcChatbotQuery extends LightningElement {
    */
   async initAndQuery(retry) {
     try {
+      this.isLoading = true;
       // Setup a search endpoint, includes requesting a search token.
       await this.setupEndpoint();
       // Send a query to Coveo's SearchAPI /rest/search.
@@ -73,12 +80,18 @@ export default class LwcChatbotQuery extends LightningElement {
         this.initAndQuery(false);
         return;
       }
-      // Store the lastQueryUid, this is useful to send analytics events.
-      this.lastQueryUid = searchAPIResponse.searchUid;
-      // Send a search event. This is async but no need to wait for it 
-      // since we don't want to block the execution and display of results.
-      this.sendSearchEvent(searchAPIResponse);
-      this.results = searchAPIResponse.results;
+      this.isLoading = false;
+      if(searchAPIResponse.status && searchAPIResponse.status !== 200) {
+        this.results = [];
+        console.error(searchAPIResponse.body.message || 'Query Error.');
+      } else {
+        // Store the lastQueryUid, this is useful to send analytics events.
+        this.lastQueryUid = searchAPIResponse.searchUid;
+        // Send a search event. This is async but no need to wait for it 
+        // since we don't want to block the execution and display of results.
+        this.sendSearchEvent(searchAPIResponse);
+        this.results = searchAPIResponse.results;
+      }
     } catch (err) {
       // Handle API error here.
       console.error(err.message);
@@ -130,7 +143,7 @@ export default class LwcChatbotQuery extends LightningElement {
   }
 
   get hasResults() {
-    return this.results && this.results.length > 0;
+    return this.results.length > 0;
   }
 
   get resultsToDisplay() {
@@ -138,5 +151,9 @@ export default class LwcChatbotQuery extends LightningElement {
       return this.results.map((result, idx) => ({ ...result, rank: idx })).slice(0, 3);
     }
     return [];
+  }
+
+  get hasError() {
+    return (this.serverError && this.serverError !== '');
   }
 }
