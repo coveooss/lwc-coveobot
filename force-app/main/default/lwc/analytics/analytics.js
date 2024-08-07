@@ -1,4 +1,4 @@
-const DEFAULT_API_ENDPOINT = 'https://platform.cloud.coveo.com/rest/ua/v15/analytics';
+const DEFAULT_API_ENDPOINT = 'https://analytics.cloud.coveo.com/rest/ua/v15/analytics';
 const API_METHOD = 'POST';
 const SEARCH_PATH = '/search';
 const CLICK_PATH = '/click';
